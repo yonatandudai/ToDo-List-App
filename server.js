@@ -1,3 +1,5 @@
+require('dotenv').config(); // Load environment variables from .env file
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,7 +14,8 @@ app.use(bodyParser.json());
 app.use('/api', taskRoutes);
 
 // Connect to MongoDB (replace with your MongoDB URI)
-mongoose.connect(process.env.my_mongo_db, {
+console.log('MongoDB URI:', process.env.MONGO_URI); 
+mongoose.connect(process.env.MY_MONGO_DB  , {
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 

@@ -1,71 +1,42 @@
-// Get all tasks
-router.get('/tasks', async (req, res) => {
+const Task = require('../models/Task');
+
+// Controller to get all tasks
+exports.getTasks = async (req, res) => {
     try {
-        const tasks = await Task.find();
-        console.log("Tasks:", tasks); // Log tasks to verify deadline is included
+        const tasks = await Task.find({});
         res.json(tasks);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch tasks' });
     }
-});
+};
 
-
-// Create a new task
-router.post('/tasks', async (req, res) => {
-    console.log("Request body:", req.body); // Log to confirm deadline is included
-    
-    const { title, completed, deadline } = req.body; 
-    const task = new Task({
-        title,
-        completed: completed || false,
-        deadline: deadline ? new Date(deadline) : null // Ensure it's saved as a Date object
-    });
-
+// Controller to create a new task
+exports.createTask = async (req, res) => {
     try {
-        const newTask = await task.save();
-        res.status(201).json(newTask);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        const newTask = new Task(req.body);
+        const savedTask = await newTask.save();
+        res.status(201).json(savedTask);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create task' });
     }
-});
+};
 
-
-
-// Update a task by ID
-router.put('/tasks/:id', async (req, res) => {
-    const { title, completed, deadline } = req.body;
-
+// Controller to update a task by ID
+exports.updateTask = async (req, res) => {
     try {
-        const task = await Task.findById(req.params.id);
-        if (!task) return res.status(404).json({ message: 'Task not found' });
-
-        if (title !== undefined) task.title = title;
-        if (completed !== undefined) task.completed = completed;
-        if (deadline !== undefined) task.deadline = new Date(deadline); // Update deadline if provided
-
-        const updatedTask = await task.save();
+        const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updatedTask);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update task' });
     }
-});
+};
 
-
-// Delete a task
-router.delete('/tasks/:id', async (req, res) => {
+// Controller to delete a task by ID
+exports.deleteTask = async (req, res) => {
     try {
-        // Validate the ID format
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ message: 'Invalid ID format' });
-        }
-
-        // Attempt to delete the task by ID
-        const task = await Task.findByIdAndDelete(req.params.id);
-        if (!task) return res.status(404).json({ message: 'Task not found' });
-
-        res.json({ message: 'Task deleted' });
-    } catch (err) {
-        console.error("Delete error:", err); // Logs the exact error for troubleshooting
-        res.status(500).json({ message: err.message });
+        await Task.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete task' });
     }
-});
+};
