@@ -48,7 +48,7 @@ To run this project, you will need:
 
 3. **Install dependencies**:
    ```bash
-   npm install
+   npm install -g nodemon
    ```
 
 4. **Set up MongoDB**:
@@ -57,7 +57,7 @@ To run this project, you will need:
 
 5. **Run the server**:
    ```bash
-   node server.js
+   nodemon server.js
    ```
 
 6. **Open the app in the browser**:
@@ -78,16 +78,21 @@ To run this project, you will need:
 
 ```
 .
-├── index.html           # The main HTML file
-├── style.css            # Styling for the frontend
-├── script.js            # JavaScript for the frontend logic
-├── server.js            # Node.js/Express server code
-├── package.json         # Project metadata and dependencies
-├── routes
-│   └── tasks.js         # Backend routes for handling task-related operations
+├── controllers
+│   └── taskController.js  # Controller for tasks
 ├── models
-│   └── Task.js          # Mongoose model for tasks
-└── README.md            # Project documentation
+│   └── Task.js            # Mongoose model for tasks
+├── routes
+│   └── tasks.js           # Routes for tasks
+├── public                 # Static assets folder
+│   ├── images             # Static images folder
+│   └── index.html         # Main HTML file
+│   └── style.css          # CSS styles file
+│   └── script.js          # Frontend JavaScript logic file
+├── .env                   # Environment variables (e.g., MongoDB URI)
+├── server.js              # Node.js/Express server code
+├── package.json           # Project metadata and dependencies
+└── README.md              # Project documentation
 ```
 
 ## API Endpoints

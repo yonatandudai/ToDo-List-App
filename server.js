@@ -6,15 +6,13 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 
-const my_mongo_db = "mongodb+srv://yonatandudai:cQQqcOg5kOTVDhyC@todoappcluster.zfbvd.mongodb.net/?retryWrites=true&w=majority&appName=ToDoAppCluster"
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', taskRoutes);
 
 // Connect to MongoDB (replace with your MongoDB URI)
-mongoose.connect(my_mongo_db, {
+mongoose.connect(process.env.my_mongo_db, {
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
